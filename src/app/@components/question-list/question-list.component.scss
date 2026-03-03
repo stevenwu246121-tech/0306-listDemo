@@ -1,0 +1,65 @@
+.survey-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  .survey-header {
+    text-align: center;
+    h1 { color: #2c3e50; margin-bottom: 10px; }
+    .description { color: #7f8c8d; font-size: 0.95rem; }
+  }
+
+  .survey-content {
+    margin: 30px 0;
+
+    .question-title {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      color: #34495e;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; // 兩欄佈局
+      gap: 15px;
+    }
+
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover { background-color: #f8f9fa; border-color: #3f51b5; }
+
+      input { margin-right: 12px; width: 18px; height: 18px; }
+      .option-label { font-size: 1rem; color: #444; }
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+
+    button {
+      padding: 10px 25px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: opacity 0.2s;
+
+      &:disabled { opacity: 0.5; cursor: not-allowed; }
+    }
+
+    .back-btn { background: #eee; color: #666; }
+    .submit-btn { background: #3f51b5; color: white; }
+  }
+}

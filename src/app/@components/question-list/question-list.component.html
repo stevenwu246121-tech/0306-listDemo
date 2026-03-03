@@ -1,0 +1,51 @@
+<p>question-list works!</p>
+
+<div class="survey-container">
+  <header class="survey-header">
+    <h1>
+  @if (surveyId === 3) {
+    通勤手段問卷調查
+  } @else {
+    問卷調查 (ID: {{surveyId}})
+  }
+    </h1>
+    <p class="description">請勾選您平時主要使用的交通工具（可複選）。</p>
+  </header>
+
+  <hr />
+
+  <div class="survey-content">
+    <div class="question-item">
+      <h3 class="question-title">1. 您常用的通勤方式有哪些？</h3>
+
+      <div class="select-all">
+        <label>
+          <input type="checkbox" (change)="toggleAll($event)"> 全選 / 全不選
+        </label>
+      </div>
+
+      <div class="options-grid">
+        @for (option of options; track option.id) {
+          <label class="checkbox-wrapper">
+            <input
+              type="checkbox"
+              [(ngModel)]="option.selected"
+              [name]="option.id"
+            />
+            <span class="option-label">{{ option.label }}</span>
+          </label>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="back-btn" (click)="goBack()">返回列表</button>
+    <button
+      class="submit-btn"
+      [disabled]="!isAnySelected()"
+      (click)="submit()">
+      送出問卷
+    </button>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<p>table-list works!</p>
+
+<!-- Page2 -->
+<div class="Page2">
+  <div class="header-status">
+    <div class="user-info">
+      <mat-icon>account_circle</mat-icon>
+      <span>已登入：<strong>{{ userName() || '管理員' }}</strong></span>
+      <button class="logout-btn" (click)="logout()">登出</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="搜尋問卷名稱"
+        [(ngModel)]="searchKeyword"
+        (keyup.enter)="onSearch()"
+      />
+
+      <input type="date" [(ngModel)]="startDateSearch" />
+      <span class="date-separator">至</span>
+      <input type="date" [(ngModel)]="endDateSearch" />
+
+      <button class="search-btn" (click)="onSearch()">搜尋</button>
+      <button class="reset-btn" (click)="onReset()">⟳</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>刪除</th>
+          <th>編號</th>
+          <th>名稱</th>
+          <th>狀態</th>
+          <th>開始時間</th>
+          <th>結束時間</th>
+          <th>操作</th>
+          <th>結果</th>
+        </tr>
+      </thead>
+      <tbody>
+  @for (survey of surveys; track survey.id) {
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td>{{ survey.id }}</td>
+
+      <td>
+       <span class="clickable-name" (click)="onNameClick(survey)">
+        {{ survey.name }}
+       </span>
+      </td>
+
+      <td>
+        <span [ngClass]="getDynamicStatus(survey)">
+        {{ survey.status }}
+       </span>
+      </td>
+      <td>{{ survey.startDate }}</td>
+      <td>{{ survey.endDate }}</td>
+
+      <td><a (click)="goToQuestion(survey)" class="action-link">查看問卷</a></td>
+      <td><a href="#" class="result-link">結果</a></td>
+    </tr>
+        } @empty {
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 20px; color: gray;">
+              找不到符合「{{ searchKeyword }}」的問卷
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
