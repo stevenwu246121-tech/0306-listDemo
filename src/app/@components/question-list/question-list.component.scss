@@ -2,64 +2,171 @@
   max-width: 600px;
   margin: 40px auto;
   padding: 30px;
-  background: #ffffff;
+  background: #a0a5c2;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
   .survey-header {
     text-align: center;
-    h1 { color: #2c3e50; margin-bottom: 10px; }
-    .description { color: #7f8c8d; font-size: 0.95rem; }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      color: #7f8c8d;
+      font-size: 0.95rem;
+    }
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
   }
 
   .survey-content {
     margin: 30px 0;
 
-    .question-title {
-      font-size: 1.1rem;
-      margin-bottom: 20px;
-      color: #34495e;
+    // 新增：每一題的容器
+    .question-item {
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+
+      &:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+      }
+
+      .question-title {
+        font-size: 1.15rem;
+        margin-bottom: 15px;
+        color: #2c3e50;
+        font-weight: 600;
+      }
+
+      // 新增：全選區塊樣式
+      .select-all {
+        margin-bottom: 15px;
+        padding: 8px 12px;
+        background: #b6bed6;
+        border-radius: 6px;
+        display: inline-block;
+
+        label {
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          font-size: 0.9rem;
+          color: #5d6d7e;
+
+          input {
+            margin-right: 8px;
+          }
+        }
+      }
     }
 
     .options-grid {
       display: grid;
       grid-template-columns: 1fr 1fr; // 兩欄佈局
-      gap: 15px;
+      gap: 12px;
+      @media (max-width: 500px) {
+        grid-template-columns: 1fr; // 手機版改為一欄，寬度更充足
+      }
     }
 
     .checkbox-wrapper {
       display: flex;
       align-items: center;
       padding: 12px 15px;
-      border: 1px solid #e0e0e0;
+      border: 1px solid #c5ebea;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s;
+      @media (max-width: 500px) {
+        padding: 15px;
+      }
 
-      &:hover { background-color: #f8f9fa; border-color: #3f51b5; }
+      &:hover {
+        background-color: #f8f9fa;
+        border-color: #3f51b5;
+      }
 
-      input { margin-right: 12px; width: 18px; height: 18px; }
-      .option-label { font-size: 1rem; color: #444; }
+      // 當被勾選時的樣式 (選配，需配合 CSS class)
+      &.active {
+        background-color: #e8eaf6;
+        border-color: #3f51b5; // 變成主色調的邊框
+        box-shadow: 0 2px 8px rgba(63, 81, 181, 0.15); // 增加一點浮動感
+      }
+
+      input {
+        margin-right: 12px;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+      }
+
+      .option-label {
+        color: #3f51b5; // 文字也跟著變色
+        font-weight: 500;
+      }
     }
   }
 
   .actions {
     display: flex;
     justify-content: space-between;
-    margin-top: 40px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #f5f5f5;
+    @media (max-width: 500px) {
+      flex-direction: column; // 手機版按鈕上下排列
+      gap: 12px;
 
     button {
-      padding: 10px 25px;
-      border-radius: 6px;
+      width: 100%; // 按鈕撐滿寬度
+      padding: 15px; // 增加高度更好按
+      padding: 12px 30px;
+      border-radius: 8px;
       border: none;
       cursor: pointer;
       font-weight: bold;
-      transition: opacity 0.2s;
+      font-size: 1rem;
+      transition: all 0.2s;
 
-      &:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      &:active {
+        transform: scale(0.98);
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
     }
 
-    .back-btn { background: #eee; color: #666; }
-    .submit-btn { background: #3f51b5; color: white; }
+    .back-btn {
+      background: #f5f5f5;
+      color: #666;
+      order: 2;
+
+      &:hover {
+        background: #e0e0e0;
+      }
+    }
+
+    .submit-btn {
+      background: #3f51b5;
+      color: white;
+      box-shadow: 0 4px 10px rgba(63, 81, 181, 0.3);
+
+      &:hover {
+        background: #303f9f;
+        order: 1;
+      }
+    }
   }
+}
 }

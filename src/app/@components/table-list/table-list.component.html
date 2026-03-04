@@ -1,33 +1,44 @@
 <p>table-list works!</p>
 
-<!-- Page2 -->
 <div class="Page2">
-  <div class="header-status">
-    <div class="user-info">
+  <mat-toolbar class="main-toolbar">
+    <span>問卷管理系統</span>
+    <span class="example-spacer"></span>
+    <div class="header-status-box">
       <mat-icon>account_circle</mat-icon>
-      <span>已登入：<strong>{{ userName() || '管理員' }}</strong></span>
+      <span>已登入：<strong>管理員</strong></span>
       <button class="logout-btn" (click)="logout()">登出</button>
     </div>
-  </div>
+  </mat-toolbar>
 
   <div class="content">
-    <div class="search-bar">
-      <input
-        type="text"
-        placeholder="搜尋問卷名稱"
-        [(ngModel)]="searchKeyword"
-        (keyup.enter)="onSearch()"
-      />
+    <div class="search-bar-container">
+      <div class="search-input-group">
+        <input type="text" placeholder="搜尋問卷名稱" [(ngModel)]="searchKeyword" (keyup.enter)="onSearch()" />
+      </div>
 
-      <input type="date" [(ngModel)]="startDateSearch" />
-      <span class="date-separator">至</span>
-      <input type="date" [(ngModel)]="endDateSearch" />
+      <div class="date-range-group">
+        <input type="date" [(ngModel)]="startDateSearch" [max]="endDateSearch" (change)="onStartDateChange()" />
 
-      <button class="search-btn" (click)="onSearch()">搜尋</button>
-      <button class="reset-btn" (click)="onReset()">⟳</button>
+        <span class="date-to">至</span>
+
+        <input type="date" [(ngModel)]="endDateSearch" [min]="startDateSearch" (change)="onEndDateChange()" />
+      </div>
+
+      <div class="action-button-group">
+        <button class="icon-btn" (click)="onSearch()">
+          <mat-icon>search</mat-icon>
+        </button>
+        <button class="icon-btn" (click)="onReset()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
     </div>
 
-    <table>
+    <hr class="section-divider">
+
+    <div class="table-container">
+    <table class="survey-table">
       <thead>
         <tr>
           <th>刪除</th>
@@ -41,37 +52,46 @@
         </tr>
       </thead>
       <tbody>
-  @for (survey of surveys; track survey.id) {
-    <tr>
-      <td><input type="checkbox" /></td>
-      <td>{{ survey.id }}</td>
+        @for (survey of surveys; track survey.id) {
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td>{{ survey.id }}</td>
 
-      <td>
-       <span class="clickable-name" (click)="onNameClick(survey)">
-        {{ survey.name }}
-       </span>
-      </td>
+          <td>
+            <span class="clickable-name" (click)="onNameClick(survey)">
+              {{ survey.name }}
+            </span>
+          </td>
 
-      <td>
-        <span [ngClass]="getDynamicStatus(survey)">
-        {{ survey.status }}
-       </span>
-      </td>
-      <td>{{ survey.startDate }}</td>
-      <td>{{ survey.endDate }}</td>
+          <td>
+            <span [ngClass]="getDynamicStatus(survey)">
+              {{ survey.status }}
+            </span>
+          </td>
+          <td>{{ survey.startDate }}</td>
+          <td>{{ survey.endDate }}</td>
 
-      <td><a (click)="goToQuestion(survey)" class="action-link">查看問卷</a></td>
-      <td><a href="#" class="result-link">結果</a></td>
-    </tr>
+          <td><a (click)="goToQuestion(survey)" class="action-link" style="cursor: pointer;">查看問卷</a></td>
+
+          <td>
+            @if (hasResult(survey.id)) {
+            <a class="result-link view-active" (click)="viewResult(survey)"
+              style="color: green; font-weight: bold; cursor: pointer; text-decoration: underline;">
+              查看結果
+            </a>
+            } @else {
+            <span style="color: #ccc;">尚未填寫</span>
+            }
+          </td>
+        </tr>
         } @empty {
-          <tr>
-            <td colspan="8" style="text-align: center; padding: 20px; color: gray;">
-              找不到符合「{{ searchKeyword }}」的問卷
-            </td>
-          </tr>
+        <tr>
+          <td colspan="8" style="text-align: center; padding: 20px; color: gray;">
+            找不到符合「{{ searchKeyword }}」的問卷
+          </td>
+        </tr>
         }
       </tbody>
     </table>
   </div>
 </div>
-

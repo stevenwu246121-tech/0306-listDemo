@@ -30,7 +30,7 @@
     <input type="text" [(ngModel)]="phone" [disabled]="isLoading()" placeholder="09xx-xxx-xxx">
   </div>
 
-  <button type="submit" (click)="onLogin()" [disabled]="isLoading()">
+  <button mat-raised-button type="submit" (click)="onLogin()" [disabled]="isLoading()">
     {{ isLoading() ? '登入中...' : '確認登入' }}
   </button>
 </div>

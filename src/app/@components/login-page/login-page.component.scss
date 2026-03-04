@@ -1,40 +1,16 @@
-// .loginPage1 {
-//     display: flex;
-//     flex-direction: column;/* 垂直排列 */
-//     align-items: center;/* 水平置中 */
-//     justify-content: center;
-//     width: 100%;/* 佔滿寬度以確保置中效果 */
-//     margin-bottom: 20px;/* 與下方功能按鈕保持距離 */
-//     border-color: #000000;
-//     border-radius: 3%;
-//     background: #d8c511;
-//     height: 70%;
-// }
-
-// .form-group {
-//     display: flex;
-//     align-items: center;
-//     justify-content: flex-end;/* 讓標籤與輸入框對齊 */
-//     margin-bottom: 10px;
-//     width: 300px;/* 設定一個固定寬度使輸入框整齊 */
-// }
-
-// .form-group label {
-//     margin-right: 10px;
-//     white-space: nowrap;
-// }
-
 .loginPage1 {
   max-width: 400px;
   margin: 50px auto;
   padding: 20px;
-  border: 1px solid #167dde;
+  border: 3px solid #167dde;
   border-radius: 8px;
+  font-weight: bold;
+  background-color: #e3eaeb;
 
   .form-group {
     margin-bottom: 15px;
     label { display: block; margin-bottom: 5px; }
-    input { width: 100%; padding: 8px; box-sizing: border-box; }
+    input { width: 100%; padding: 8px; box-sizing: border-box; border-radius: 3%;}
   }
 
   .button {

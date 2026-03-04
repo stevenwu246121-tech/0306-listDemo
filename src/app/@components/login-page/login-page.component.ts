@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ListServiceService } from './../../@service/list-service.service';
+import { MatButton } from "@angular/material/button";
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, MatButton],
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
@@ -37,8 +38,8 @@ export class LoginPageComponent {
     setTimeout(() => {
       this.isLoading.set(false);
 
-      // 這裡寫你的登入邏輯，現在先假設密碼是 "1234" 就成功
-      if (this.password() === '1234') {
+      // 這裡寫你的登入邏輯，現在先假設密碼是 "123" 就成功
+      if (this.password() === '123') {
         // this.showMessage(`歡迎回來，${this.name()}！登入成功`, 'success');
         // 這裡可以執行路由跳轉：this.router.navigate(['/survey']);
         // 假設驗證成功
