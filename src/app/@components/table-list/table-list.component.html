@@ -1,13 +1,12 @@
-<p>table-list works!</p>
-
+<!-- Page2 -->
 <div class="Page2">
   <mat-toolbar class="main-toolbar">
     <span>問卷管理系統</span>
     <span class="example-spacer"></span>
     <div class="header-status-box">
-      <mat-icon>account_circle</mat-icon>
+      <mat-icon>self_improvement</mat-icon>
       <span>已登入：<strong>管理員</strong></span>
-      <button class="logout-btn" (click)="logout()">登出</button>
+      <button class="logout-btn" (click)="logout()" mat-raised-button>登出</button>
     </div>
   </mat-toolbar>
 
@@ -80,7 +79,7 @@
               查看結果
             </a>
             } @else {
-            <span style="color: #ccc;">尚未填寫</span>
+            <span style="color: #757c80;">尚未填寫</span>
             }
           </td>
         </tr>
