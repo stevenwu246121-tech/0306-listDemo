@@ -4,13 +4,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ListServiceService } from './../../@service/list-service.service';
-import { MatButton } from "@angular/material/button";
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-question-list',
   standalone: true,
-  imports: [CommonModule, MatIconModule, FormsModule,MatButtonModule],
+  imports: [CommonModule, MatIconModule, FormsModule, MatButtonModule],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
 })
@@ -30,17 +29,13 @@ export class QuestionListComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.surveyId = Number(this.route.snapshot.paramMap.get('id'));
-  }
-
   questions = [
     {
       id: 'q1',
       title: '1. 您常用的通勤方式有哪些？',
       options: [
-        { id: 'mrt', label: '捷運 (MRT)', selected: false },
-        { id: 'bus', label: '公車 (Bus)', selected: false },
+        { id: 'mrt', label: '捷運', selected: false },
+        { id: 'bus', label: '公車', selected: false },
         { id: 'car', label: '自行開車', selected: false },
         { id: 'scooter', label: '騎機車', selected: false },
       ],
@@ -49,12 +44,17 @@ export class QuestionListComponent implements OnInit {
       id: 'q2',
       title: '2. 您通常在什麼時段通勤？',
       options: [
-        { id: 'morning', label: '早上 (07:00-09:00)', selected: false },
-        { id: 'afternoon', label: '下午 (17:00-19:00)', selected: false },
-        { id: 'night', label: '深夜 (22:00以後)', selected: false },
+        { id: 'morning', label: '早上 (12:00以前)', selected: false },
+        { id: 'afternoon', label: '下午 (12:00以後)', selected: false },
+        { id: 'night', label: '深夜 (22:00後)', selected: false },
       ],
     },
   ];
+
+  ngOnInit() {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    this.surveyId = idParam ? Number(idParam) : null;
+  }
 
   toggleAll(event: any, question: any) {
     const isChecked = event.target.checked;
@@ -62,24 +62,27 @@ export class QuestionListComponent implements OnInit {
   }
 
   isAnySelected(): boolean {
-    return this.questions.every((q) => q.options.some((opt) => opt.selected));
+    return this.questions.some((q) => q.options.some((opt) => opt.selected));
   }
 
   submit() {
-    if (this.surveyId === null) return;
+    if (this.surveyId === null) {
+      alert('讀取問卷資訊錯誤！');
+      return;
+    }
 
-    const allAnswers = this.questions.map((q) => ({
+    const resultData = this.questions.map((q) => ({
       questionTitle: q.title,
       selectedOptions: q.options
         .filter((opt) => opt.selected)
         .map((opt) => opt.label),
     }));
 
-    //使用注入好的listService
-    this.listService.setResult(this.surveyId, allAnswers);
+    // 呼叫 Service 儲存
+    this.listService.setResult(this.surveyId, resultData);
 
     alert('問卷已成功送出！');
-    this.goBack();
+    this.router.navigate(['/table-list']);
   }
 
   goBack() {

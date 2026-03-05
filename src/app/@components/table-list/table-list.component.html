@@ -1,17 +1,25 @@
 <!-- Page2 -->
 <div class="Page2">
   <mat-toolbar class="main-toolbar">
-    <span>問卷管理系統</span>
+    <span>動態問卷</span>
     <span class="example-spacer"></span>
     <div class="header-status-box">
-      <mat-icon>self_improvement</mat-icon>
-      <span>已登入：<strong>管理員</strong></span>
+      <mat-icon>{{ isAdministrator ? 'admin_panel_settings' : 'self_improvement' }}</mat-icon>
+
+      <span>
+        已登入：<strong>{{ userName() }}</strong>
+        <span class="role-badge" [ngClass]="isAdministrator ? 'role-admin' : 'role-guest'">
+          {{ isAdministrator ? '管理員' : '訪客' }}
+        </span>
+      </span>
+
       <button class="logout-btn" (click)="logout()" mat-raised-button>登出</button>
     </div>
   </mat-toolbar>
 
   <div class="content">
     <div class="search-bar-container">
+
       <div class="search-input-group">
         <input type="text" placeholder="搜尋問卷名稱" [(ngModel)]="searchKeyword" (keyup.enter)="onSearch()" />
       </div>
@@ -32,65 +40,73 @@
           <mat-icon>refresh</mat-icon>
         </button>
       </div>
+      @if (isAdministrator) {
+      <button class="admin-delete-btn" (click)="onDeleteSelected()" [disabled]="selectedIds.size === 0">
+        <mat-icon>delete</mat-icon> 刪除 ({{selectedIds.size}})
+      </button>
+      }
     </div>
 
     <hr class="section-divider">
 
     <div class="table-container">
-    <table class="survey-table">
-      <thead>
-        <tr>
-          <th>刪除</th>
-          <th>編號</th>
-          <th>名稱</th>
-          <th>狀態</th>
-          <th>開始時間</th>
-          <th>結束時間</th>
-          <th>操作</th>
-          <th>結果</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (survey of surveys; track survey.id) {
-        <tr>
-          <td><input type="checkbox" /></td>
-          <td>{{ survey.id }}</td>
-
-          <td>
-            <span class="clickable-name" (click)="onNameClick(survey)">
-              {{ survey.name }}
-            </span>
-          </td>
-
-          <td>
-            <span [ngClass]="getDynamicStatus(survey)">
-              {{ survey.status }}
-            </span>
-          </td>
-          <td>{{ survey.startDate }}</td>
-          <td>{{ survey.endDate }}</td>
-
-          <td><a (click)="goToQuestion(survey)" class="action-link" style="cursor: pointer;">查看問卷</a></td>
-
-          <td>
-            @if (hasResult(survey.id)) {
-            <a class="result-link view-active" (click)="viewResult(survey)"
-              style="color: green; font-weight: bold; cursor: pointer; text-decoration: underline;">
-              查看結果
-            </a>
-            } @else {
-            <span style="color: #757c80;">尚未填寫</span>
+      <table class="survey-table">
+        <thead>
+          <tr>
+            @if (isAdministrator) { <th class="col-delete">刪除</th> }
+            <th>編號</th>
+            <th>名稱</th>
+            <th>狀態</th>
+            <th>開始時間</th>
+            <th>結束時間</th>
+            <th>操作</th>
+            <th>結果</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (survey of surveys; track survey.id) {
+          <tr>
+            @if (isAdministrator) {
+            <td><input type="checkbox" (change)="onCheckboxChange(survey.id, $event)"
+                [checked]="selectedIds.has(survey.id)" /></td>
             }
-          </td>
-        </tr>
-        } @empty {
-        <tr>
-          <td colspan="8" style="text-align: center; padding: 20px; color: gray;">
-            找不到符合「{{ searchKeyword }}」的問卷
-          </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+            <td>{{ survey.id }}</td>
+
+            <td>
+              <span class="clickable-name" (click)="onNameClick(survey)">
+                {{ survey.name }}
+              </span>
+            </td>
+
+            <td>
+              <span [ngClass]="getDynamicStatus(survey)">
+                {{ survey.status }}
+              </span>
+            </td>
+            <td>{{ survey.startDate }}</td>
+            <td>{{ survey.endDate }}</td>
+
+            <td><a (click)="goToQuestion(survey)" class="action-link" style="cursor: pointer;">查看問卷</a></td>
+
+            <td>
+              @if (hasResult(survey.id)) {
+              <a class="result-link view-active" (click)="viewResult(survey)"
+                style="color: green; font-weight: bold; cursor: pointer; text-decoration: underline;">
+                查看結果
+              </a>
+              } @else {
+              <span style="color: #757c80;">尚未填寫</span>
+              }
+            </td>
+          </tr>
+          } @empty {
+          <tr>
+            <td [attr.colspan]="isAdministrator ? 8 : 7" style="text-align: center; padding: 20px; color: gray;">
+              找不到符合「{{ searchKeyword }}」的問卷
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>

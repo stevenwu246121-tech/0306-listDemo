@@ -3,17 +3,18 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ListServiceService } from './../../@service/list-service.service';
-import { MatButton } from "@angular/material/button";
+import { MatButton } from '@angular/material/button';
 @Component({
   selector: 'app-login-page',
   standalone: true,
   imports: [FormsModule, CommonModule, MatButton],
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss']
+  styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPageComponent {
   private listService = inject(ListServiceService);
   private router = inject(Router);
+
   // 使用 Signals 儲存表單資料
   name = signal('');
   email = signal('');
@@ -22,35 +23,36 @@ export class LoginPageComponent {
 
   // 狀態控制
   isLoading = signal(false);
-  message = signal({ text: '', type: '' }); // type: 'success' | 'error'
+  message = signal({ text: '', type: '' });
 
   onLogin() {
-    // 基本驗證
-    if (!this.email() || !this.password()) {
+    const loginEmail = this.email().trim();
+    const loginPassword = this.password().trim();
+    const loginName = this.name().trim() || '訪客';
+
+    // --- 防呆驗證 ---
+    if (!loginEmail || !loginPassword) {
       this.showMessage('請填寫信箱與密碼', 'error');
       return;
     }
 
     this.isLoading.set(true);
-    this.message.set({ text: '登入驗證中...', type: 'info' });
 
-    // 模擬 API 請求 (2秒後回傳結果)
     setTimeout(() => {
       this.isLoading.set(false);
 
-      // 這裡寫你的登入邏輯，現在先假設密碼是 "123" 就成功
-      if (this.password() === '123') {
-        // this.showMessage(`歡迎回來，${this.name()}！登入成功`, 'success');
-        // 這裡可以執行路由跳轉：this.router.navigate(['/survey']);
-        // 假設驗證成功
-    this.listService.setUser(this.name()); // 存入 Service
-    this.router.navigate(['/table-list']); // 跳轉到 Page 2
+      if (loginPassword === '123') {
+        // 管理者模式
+        this.listService.setUser(loginName, 'ADMIN');
+        this.router.navigate(['/table-list']);
       } else {
-        this.showMessage('登入失敗：帳號或密碼錯誤', 'error');
+        // 一般訪客模式 (只要密碼不是 123 且不為空)
+        this.listService.setUser(loginName, 'GUEST');
+        this.router.navigate(['/table-list']);
       }
-    }, 2000);
+    }, 1000);
   }
-
+  //除錯重點新增方法定義
   private showMessage(text: string, type: string) {
     this.message.set({ text, type });
   }
