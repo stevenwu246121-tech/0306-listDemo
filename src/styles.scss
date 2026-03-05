@@ -1,4 +1,9 @@
-/* You can add global styles to this file, and also import other style files */
+//匯入Angular Material預設主題
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.4); //調整 Dialog 背後的遮罩深淺
+}

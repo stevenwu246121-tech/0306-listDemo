@@ -15,13 +15,13 @@ export class LoginPageComponent {
   private listService = inject(ListServiceService);
   private router = inject(Router);
 
-  // 使用 Signals 儲存表單資料
+  //使用Signals 儲存表單資料
   name = signal('');
   email = signal('');
   password = signal('');
   phone = signal('');
 
-  // 狀態控制
+  //狀態控制
   isLoading = signal(false);
   message = signal({ text: '', type: '' });
 
@@ -30,7 +30,7 @@ export class LoginPageComponent {
     const loginPassword = this.password().trim();
     const loginName = this.name().trim() || '訪客';
 
-    // --- 防呆驗證 ---
+    //防呆驗證
     if (!loginEmail || !loginPassword) {
       this.showMessage('請填寫信箱與密碼', 'error');
       return;
@@ -46,13 +46,13 @@ export class LoginPageComponent {
         this.listService.setUser(loginName, 'ADMIN');
         this.router.navigate(['/table-list']);
       } else {
-        // 一般訪客模式 (只要密碼不是 123 且不為空)
+        // 一般訪客模式(密碼不是123&&不為空)
         this.listService.setUser(loginName, 'GUEST');
         this.router.navigate(['/table-list']);
       }
     }, 1000);
   }
-  //除錯重點新增方法定義
+  //方法定義
   private showMessage(text: string, type: string) {
     this.message.set({ text, type });
   }

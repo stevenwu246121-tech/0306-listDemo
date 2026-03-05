@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>
+  <mat-icon color="primary" style="vertical-align: middle;">
+    {{ data.type === 'message' ? 'info' : 'assessment' }}
+  </mat-icon>
+  {{ data.title }}
+</h2>
+
+<mat-dialog-content>
+  @if (data.type === 'message') {
+  <p class="msg-text">{{ data.message }}</p>
+  }
+
+  @if (data.type === 'result') {
+  <div class="result-container">
+    @for (item of data.surveyResults; track $index) {
+    <div class="result-block">
+      <p><strong>Q{{ $index + 1 }}. {{ item.questionTitle }}</strong></p>
+      <div class="tags">
+        @for (ans of item.selectedOptions; track ans) {
+        <span class="ans-tag">{{ ans }}</span>
+        }
+        @if (item.selectedOptions.length === 0) {
+        <span class="no-ans">未填寫</span>
+        }
+      </div>
+    </div>
+    }
+  </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" mat-dialog-close>關閉</button>
+</mat-dialog-actions>

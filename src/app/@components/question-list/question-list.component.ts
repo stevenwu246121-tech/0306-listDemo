@@ -3,24 +3,33 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ListServiceService } from './../../@service/list-service.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog'; // 補上 MatDialog
+
+// Services & Components
+import { ListServiceService } from './../../@service/list-service.service';
+import { DialogComponent, DialogData } from '../result-dialog/dialog.component';
 
 @Component({
   selector: 'app-question-list',
   standalone: true,
-  imports: [CommonModule, MatIconModule, FormsModule, MatButtonModule],
+  imports: [
+    CommonModule,
+    MatIconModule,
+    FormsModule,
+    MatButtonModule,
+    MatDialogModule,
+  ],
   templateUrl: './question-list.component.html',
   styleUrl: './question-list.component.scss',
 })
 export class QuestionListComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  // 將 Service 注入移到這裡
   private listService = inject(ListServiceService);
+  private dialog = inject(MatDialog); // 補上注入
 
   surveyId: number | null = null;
-  // ngModel: any; // 這行如果沒用到可以刪除，HTML 裡用 option.selected 即可
 
   @HostListener('window:pageshow', ['$event'])
   onPageShow(event: PageTransitionEvent) {
@@ -56,8 +65,9 @@ export class QuestionListComponent implements OnInit {
     this.surveyId = idParam ? Number(idParam) : null;
   }
 
-  toggleAll(event: any, question: any) {
-    const isChecked = event.target.checked;
+  // 建議加上型別以符合專業架構
+  toggleAll(event: Event, question: any) {
+    const isChecked = (event.target as HTMLInputElement).checked;
     question.options.forEach((opt: any) => (opt.selected = isChecked));
   }
 
@@ -67,7 +77,7 @@ export class QuestionListComponent implements OnInit {
 
   submit() {
     if (this.surveyId === null) {
-      alert('讀取問卷資訊錯誤！');
+      this.openDialog('message', '讀取失敗', '讀取問卷資訊錯誤！');
       return;
     }
 
@@ -78,11 +88,31 @@ export class QuestionListComponent implements OnInit {
         .map((opt) => opt.label),
     }));
 
-    // 呼叫 Service 儲存
+    // 儲存資料
     this.listService.setResult(this.surveyId, resultData);
 
-    alert('問卷已成功送出！');
-    this.router.navigate(['/table-list']);
+    // 使用 Dialog 並處理關閉後的動作
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '400px',
+      data: {
+        type: 'message',
+        title: '提交成功',
+        message: '您的問卷已成功送出！'
+      } as DialogData
+    });
+
+    // 重要：等使用者按下「關閉」才跳轉
+    dialogRef.afterClosed().subscribe(() => {
+      this.router.navigate(['/table-list']);
+    });
+  }
+
+  // 封裝常用彈窗邏輯
+  private openDialog(type: 'message' | 'result', title: string, message: string) {
+    this.dialog.open(DialogComponent, {
+      width: '400px',
+      data: { type, title, message } as DialogData
+    });
   }
 
   goBack() {
