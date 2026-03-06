@@ -41,7 +41,7 @@ export class LoginPageComponent {
     setTimeout(() => {
       this.isLoading.set(false);
 
-      if (loginPassword === '123') {
+      if (loginName ==='admin' || loginPassword === '123' ) {
         // 管理者模式
         this.listService.setUser(loginName, 'ADMIN');
         this.router.navigate(['/table-list']);

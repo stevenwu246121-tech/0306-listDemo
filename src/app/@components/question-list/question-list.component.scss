@@ -11,11 +11,10 @@
 
 .survey-container {
   max-width: 600px;
-  margin: 40px auto;
+  margin: 80px auto;
   padding: 30px;
-  background: rgba(199, 206, 241, 0.85);
+  background: rgba(200, 206, 236, 0.85);
   backdrop-filter: blur(5px); //毛玻璃感
-
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 
@@ -37,6 +36,7 @@
     border: 0;
     border-top: 1px solid #eee;
     margin: 20px 0;
+
   }
 
   .survey-content {
@@ -95,7 +95,7 @@
       display: flex;
       align-items: center;
       padding: 12px 15px;
-      border: 1px solid #c5ebea;
+      border: 1px solid #a0e7e5;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s;
